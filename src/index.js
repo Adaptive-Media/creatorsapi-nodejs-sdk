@@ -102,6 +102,7 @@ import ValidationExceptionResponseContent from './model/ValidationExceptionRespo
 import VariationAttribute from './model/VariationAttribute';
 import VariationDimension from './model/VariationDimension';
 import VariationSummary from './model/VariationSummary';
+import VariationSummaryPrice from './model/VariationSummaryPrice';
 import VariationsResult from './model/VariationsResult';
 import WebsiteSalesRank from './model/WebsiteSalesRank';
 import DefaultApi from './api/DefaultApi';
@@ -666,6 +667,12 @@ export {
      * @property {module:model/VariationSummary}
      */
     VariationSummary,
+
+    /**
+     * The VariationSummaryPrice model constructor.
+     * @property {module:model/VariationSummaryPrice}
+     */
+    VariationSummaryPrice,
 
     /**
      * The VariationsResult model constructor.

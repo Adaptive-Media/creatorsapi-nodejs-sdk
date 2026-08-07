@@ -13,27 +13,21 @@
  * permissions and limitations under the License.
  */
 
-// Run `npm install` and `npm run build` before executing the following code with `node sampleListFeeds.js`
+/**
+ * Sample script demonstrating how to use the CreatorsAPI Node.js SDK for ListFeeds API
+ * ListFeeds operation retrieves a list of available product feeds that your store has access to.
+ * 
+ * Run `npm install` and `npm run build` before executing with `node sampleListFeeds.js`
+ */
 
-const { ApiClient, DefaultApi }  = require('../dist/index');
+const { ApiClient, DefaultApi } = require('../dist/index');
 
 // Initialize API client
 const apiClient = new ApiClient();
 
-// Specify your credentials here. 
-// Please add your credential id here
+// Add credential details
 apiClient.credentialId = "<YOUR CREDENTIAL ID>";
-
-// Please add your credential secret here
 apiClient.credentialSecret = "<YOUR CREDENTIAL SECRET>";
-
-/**
- * Please add your credential version here
- * For eg-
- * - 2.1 for North America (NA) region
- * - 2.2 for Europe (EU) region 
- * - 2.3 for Far East (FE) region
-*/
 apiClient.version = "<YOUR CREDENTIAL VERSION>";
 
 // Initialize API
@@ -44,16 +38,14 @@ const api = new DefaultApi(apiClient);
  */
 async function listFeeds() {
     /**
-     * Specify the marketplace to which you want to send the request
-     * Eg- "www.amazon.com" for US marketplace
-     * For more details, refer: https://affiliate-program.amazon.com/creatorsapi/docs/en-us/api-reference/common-request-headers-and-parameters#marketplace-locale-reference
+     * Add marketplace. For more details, refer: https://affiliate-program.amazon.com/creatorsapi/docs/en-us/api-reference/common-request-headers-and-parameters#marketplace-locale-reference
      */
     const marketplace = "<YOUR MARKETPLACE>";
 
     try {
         const response = await api.listFeeds(marketplace);
         console.log('API called successfully.');
-        console.log("Complete Response:\n", JSON.stringify(response, null, 2));
+        console.log('Complete Response:\n', JSON.stringify(response, null, 2));
     } catch (error) {
         console.log('Error calling Creators API!');
         console.log('Full Error Object:\n', JSON.stringify(error, null, 2));

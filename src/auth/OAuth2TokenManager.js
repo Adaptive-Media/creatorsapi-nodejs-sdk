@@ -65,17 +65,33 @@ class OAuth2TokenManager {
      */
     async refreshToken() {
         try {
-            const requestBody = new URLSearchParams({
-                'grant_type': this.config.getGrantType(),
-                'client_id': this.config.getCredentialId(),
-                'client_secret': this.config.getCredentialSecret(),
-                'scope': this.config.getScope()
-            }).toString();
+            let response;
+            
+            if (this.config.isLwa()) {
+                // LWA (v3.x) uses JSON body
+                response = await superagent
+                    .post(this.config.getCognitoEndpoint())
+                    .set('Content-Type', 'application/json')
+                    .send({
+                        grant_type: this.config.getGrantType(),
+                        client_id: this.config.getCredentialId(),
+                        client_secret: this.config.getCredentialSecret(),
+                        scope: this.config.getScope()
+                    });
+            } else {
+                // Cognito (v2.x) uses form-encoded
+                const requestBody = new URLSearchParams({
+                    'grant_type': this.config.getGrantType(),
+                    'client_id': this.config.getCredentialId(),
+                    'client_secret': this.config.getCredentialSecret(),
+                    'scope': this.config.getScope()
+                }).toString();
 
-            const response = await superagent
-                .post(this.config.getCognitoEndpoint())
-                .set('Content-Type', 'application/x-www-form-urlencoded')
-                .send(requestBody);
+                response = await superagent
+                    .post(this.config.getCognitoEndpoint())
+                    .set('Content-Type', 'application/x-www-form-urlencoded')
+                    .send(requestBody);
+            }
 
             const data = response.body;
             

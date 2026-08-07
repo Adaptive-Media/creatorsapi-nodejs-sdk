@@ -15,6 +15,7 @@
 
 import ApiClient from '../ApiClient';
 import VariationDimension from './VariationDimension';
+import VariationSummaryPrice from './VariationSummaryPrice';
 
 /**
  * The VariationSummary model module.
@@ -54,6 +55,9 @@ class VariationSummary {
             if (data.hasOwnProperty('pageCount')) {
                 obj['pageCount'] = ApiClient.convertToType(data['pageCount'], 'Number');
             }
+            if (data.hasOwnProperty('price')) {
+                obj['price'] = VariationSummaryPrice.constructFromObject(data['price']);
+            }
             if (data.hasOwnProperty('variationCount')) {
                 obj['variationCount'] = ApiClient.convertToType(data['variationCount'], 'Number');
             }
@@ -70,6 +74,10 @@ class VariationSummary {
      * @return {boolean} to indicate whether the JSON data is valid with respect to <code>VariationSummary</code>.
      */
     static validateJSON(data) {
+        // validate the optional field `price`
+        if (data['price']) { // data not null
+          VariationSummaryPrice.validateJSON(data['price']);
+        }
         if (data['variationDimensions']) { // data not null
             // ensure the json data is an array
             if (!Array.isArray(data['variationDimensions'])) {
@@ -94,6 +102,11 @@ class VariationSummary {
  * @member {Number} pageCount
  */
 VariationSummary.prototype['pageCount'] = undefined;
+
+/**
+ * @member {module:model/VariationSummaryPrice} price
+ */
+VariationSummary.prototype['price'] = undefined;
 
 /**
  * Total number of variations available for the product. This represents the complete count of all child ASINs across all pages. Use this value along with pageCount to understand the full scope of available variations.

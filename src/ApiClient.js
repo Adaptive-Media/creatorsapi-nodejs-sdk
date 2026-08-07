@@ -21,7 +21,7 @@ const OAuth2TokenManager = require('./auth/OAuth2TokenManager.js');
 
 /**
 * @module ApiClient
-* @version 1.1.2
+* @version 1.2.0
 */
 
 /**
@@ -58,7 +58,7 @@ class ApiClient {
          * @default {}
          */
         this.defaultHeaders = {
-            'User-Agent': 'creatorsapi-nodejs-sdk/1.1.2'
+            'User-Agent': 'creatorsapi-nodejs-sdk/1.2.0'
         };
 
         /**
@@ -537,8 +537,12 @@ class ApiClient {
                 this.tokenManager = new OAuth2TokenManager(config);
             }
             const token = await this.tokenManager.getToken();
-            // Add Authorization headers
-            headerParams['Authorization'] = `Bearer ${token}, Version ${this.version}`;
+            // Add Authorization headers - Version only for v2.x
+            if (this.version.startsWith("3.")) {
+                headerParams['Authorization'] = `Bearer ${token}`;
+            } else {
+                headerParams['Authorization'] = `Bearer ${token}, Version ${this.version}`;
+            }
         } catch (error) {
             throw error;
         }

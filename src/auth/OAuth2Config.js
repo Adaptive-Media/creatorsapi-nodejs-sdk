@@ -19,7 +19,8 @@
  */
 class OAuth2Config {
     // Constants
-    static SCOPE = "creatorsapi/default";
+    static COGNITO_SCOPE = "creatorsapi/default";
+    static LWA_SCOPE = "creatorsapi::default";
     static GRANT_TYPE = "client_credentials";
 
     /**
@@ -49,15 +50,31 @@ class OAuth2Config {
         }
         
         switch (this.version) {
+            // Cognito endpoints (v2.x)
             case "2.1":
                 return "https://creatorsapi.auth.us-east-1.amazoncognito.com/oauth2/token";
             case "2.2":
                 return "https://creatorsapi.auth.eu-south-2.amazoncognito.com/oauth2/token";
             case "2.3":
                 return "https://creatorsapi.auth.us-west-2.amazoncognito.com/oauth2/token";
+            // LWA endpoints (v3.x)
+            case "3.1":
+                return "https://api.amazon.com/auth/o2/token";
+            case "3.2":
+                return "https://api.amazon.co.uk/auth/o2/token";
+            case "3.3":
+                return "https://api.amazon.co.jp/auth/o2/token";
             default:
-                throw new Error(`Unsupported version: ${this.version}. Supported versions are: 2.1, 2.2, 2.3`);
+                throw new Error(`Unsupported version: ${this.version}. Supported versions are: 2.1, 2.2, 2.3, 3.1, 3.2, 3.3`);
         }
+    }
+
+    /**
+     * Checks if this is an LWA (v3.x) configuration
+     * @returns {boolean} True if using LWA authentication
+     */
+    isLwa() {
+        return this.version.startsWith("3.");
     }
 
     /**
@@ -97,7 +114,7 @@ class OAuth2Config {
      * @returns {string} The OAuth2 scope
      */
     getScope() {
-        return OAuth2Config.SCOPE;
+        return this.isLwa() ? OAuth2Config.LWA_SCOPE : OAuth2Config.COGNITO_SCOPE;
     }
 
     /**
